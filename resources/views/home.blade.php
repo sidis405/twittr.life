@@ -17,6 +17,18 @@
                     You are logged in!
                 </div>
             </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">{{ count($tweets) }} Favorited Tweets</div>
+
+                <div class="panel-body">
+                    <ul>
+                        @foreach($tweets as $tweet)
+                            <li>{!! $tweet->text !!}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </div>
