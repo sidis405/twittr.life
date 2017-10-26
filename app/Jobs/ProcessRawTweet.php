@@ -38,7 +38,14 @@ class ProcessRawTweet implements ShouldQueue
 
         $formattedTweet = $repo->makeFromRaw($this->rawTweet->dump);
 
-        $this->user->tweets()->create(json_decode(json_encode($formattedTweet), true));
+        $tweet = json_decode(json_encode($formattedTweet), true);
+
+
+        if ($tweet['quoted']) {
+            $tweet['quoted'] = $this->user->tweets()->create($tweet['quoted'])->id;
+        }
+
+        $this->user->tweets()->create($tweet);
 
         $this->rawTweet->delete();
     }

@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+
 @section('content')
 <div class="container">
     <div class="row">
@@ -18,17 +19,8 @@
                 </div>
             </div>
 
-            <div class="panel panel-default">
-                <div class="panel-heading">{{ count($tweets) }} Favorited Tweets</div>
+            @include('tweet-list')
 
-                <div class="panel-body">
-                    <ul>
-                        @foreach($tweets as $tweet)
-                            <li>{!! $tweet->text !!}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
         </div>
     </div>
 </div>

@@ -49,12 +49,16 @@ class GetFavoritesForUser extends Command
         $index = Tweet::get()->pluck('tweet_id');
 
         $favorites = Twitter::getFavorites(
-            ['screen_name' => $this->argument('nickname'), 'count' => 201, 'format' => 'json', 'include_entities' => true]
+            ['screen_name' => $this->argument('nickname'),
+            'count' => 201, 'format' => 'json',
+            'include_entities' => true]
         );
 
         $favorites = json_decode($favorites);
 
         $saved = 0;
+
+        $queue = collect();
 
         foreach ($favorites as $favorite) {
             if (!$index->contains($favorite->id)) {
@@ -64,10 +68,21 @@ class GetFavoritesForUser extends Command
                 $raw->dump = json_encode($favorite);
                 $raw->save();
 
-                $saved++;
+                $this->line('Saved raw tweet ' . $raw->tweet_id);
 
-                event(new RawTweetWasSaved($raw, $user));
+                $saved++;
+                $queue->push($raw);
+
+                // event(new RawTweetWasSaved($raw, $user));
+
+                // $this->line('Processed raw tweet ' . $raw->tweet_id);
             }
+        }
+
+        foreach ($queue->reverse() as $raw) {
+            event(new RawTweetWasSaved($raw, $user));
+
+            $this->line('Processed raw tweet ' . $raw->tweet_id);
         }
 
 

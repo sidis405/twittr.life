@@ -38,6 +38,11 @@ class User extends Authenticatable
 
     public function tweets()
     {
-        return $this->hasMany(Tweet::class);
+        return $this->hasMany(Tweet::class)->orderBy('id', 'DESC');
+    }
+
+    public function rawTweets()
+    {
+        return $this->hasMany(Raw::class);
     }
 }

@@ -21,7 +21,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $tweets = auth()->user()->load('tweets')->tweets;
+        $tweets = auth()->user()->load('tweets.quote')->tweets;
+
+        // $tweets = auth()->user()->load('rawTweets')->rawTweets->pluck('dump')->map(function ($raw) {
+        //     return json_decode($raw);
+        // });
+
+        // return $tweets;
 
         return view('home', compact('tweets'));
     }
